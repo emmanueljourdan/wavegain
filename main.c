@@ -213,15 +213,12 @@ int process_files(FILE_LIST* file_list, SETTINGS* settings, const char* dir)
 		if (!settings->no_offset && settings->adc) {
 			int dc_l = (int)(album_dc_offset[0] * 32768 * -1);
 			int dc_r = (int)(album_dc_offset[1] * 32768 * -1);
-			fprintf(stderr, " ********************* Album DC Offset | %4d  |  %4d  | ***************\n",
-				dc_l, dc_r);
 			if(write_to_log) {
 				write_log(" ********************* Album DC Offset | %4d  |  %4d  | ***************\n",
 					dc_l, dc_r);
 			}
 		}
 
-		fprintf(stderr, "\n");
 		if(write_to_log)
 			write_log("\n");
 
@@ -237,9 +234,6 @@ int process_files(FILE_LIST* file_list, SETTINGS* settings, const char* dir)
 					factor_clip /= scale;
 				scale *= factor_clip;
 			}
-			if (settings->scale) {
-				fprintf(stdout, "%8.6lf", scale);
-			}
 
 			if (scale > 0.0)
 				dB = 20. * log10(scale);
@@ -247,13 +241,11 @@ int process_files(FILE_LIST* file_list, SETTINGS* settings, const char* dir)
 				dB = 0.0;
 			audiophile_gain = dB;
 			if (audiophile_gain < 0.1 && audiophile_gain > -0.1 && !settings->need_to_process) {
-				fprintf(stderr, " No Album Gain adjustment or DC Offset correction required, exiting.\n");
 				if(write_to_log)
 					write_log(" No Album Gain adjustment or DC Offset correction required, exiting.\n");
 				settings->set_album_gain = 1;
 			}
 			else {
-				fprintf(stderr, " Recommended Album Gain: %+6.2f dB\tScale: %6.4f\n\n", audiophile_gain, scale);
 				if(write_to_log)
 					write_log(" Recommended Album Gain: %+6.2f dB\tScale: %6.4f\n\n", audiophile_gain, scale);
 			}
@@ -267,7 +259,6 @@ int process_files(FILE_LIST* file_list, SETTINGS* settings, const char* dir)
 				if (settings->audiophile && settings->set_album_gain == 1)
 					break;
 				if (settings->radio && (file->track_gain < 0.1 && file->track_gain > -0.1) && !settings->need_to_process) {
-					fprintf(stderr, " No Title Gain adjustment or DC Offset correction required for file: %s, skipping.\n", file->filename);
 					if(write_to_log)
 						write_log(" No Title Gain adjustment or DC Offset correction required for file: %s, skipping.\n", file->filename);
 				}
@@ -280,7 +271,6 @@ int process_files(FILE_LIST* file_list, SETTINGS* settings, const char* dir)
 		}
 	}
 
-	fprintf(stderr, "\n WaveGain Processing completed normally\n");
 	if(write_to_log)
 		write_log("\n WaveGain Processing completed normally\n\n");
 

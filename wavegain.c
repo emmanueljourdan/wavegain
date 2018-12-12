@@ -206,10 +206,6 @@ int get_gain(const char *filename, double *track_peak, double *track_gain,
     
 	if (settings->first_file) {
 		total_samples = (double)wg_opts->total_samples_per_channel;
-		fprintf(stderr, "\n Analyzing...\n\n");
-		fprintf(stderr, "    Gain   |  Peak  | Scale | New Peak |Left DC|Right DC| Track\n");
-		fprintf(stderr, "           |        |       |          |Offset | Offset |\n");
-		fprintf(stderr, " --------------------------------------------------------------\n");
 		if(write_to_log) {
 			write_log("\n Analyzing...\n\n");
 			write_log("    Gain   |  Peak  | Scale | New Peak |Left DC|Right DC| Track\n");
@@ -352,8 +348,6 @@ int get_gain(const char *filename, double *track_peak, double *track_gain,
 			dc_l = (int)(dc_offset[0] * 32768 * -1);
 			dc_r = (int)(dc_offset[1] * 32768 * -1);
 		}
-		fprintf(stderr, " %+6.2lf dB | %6.0lf | %5.2lf | %8.0lf | %4d  |  %4d  | %s\n",
-			*track_gain, peak, scale, new_peak, dc_l, dc_r, filename);
 		if(write_to_log) {
 			write_log(" %+6.2lf dB | %6.0lf | %5.2lf | %8.0lf | %4d  |  %4d  | %s\n",
 				*track_gain, peak, scale, new_peak, dc_l, dc_r, filename);
@@ -564,8 +558,6 @@ int write_gains(const char *filename, double radio_gain, double audiophile_gain,
 			wg_opts->gain_scale = scale;
 		}
 
-		fprintf(stderr, "                                             \r");
-		fprintf(stderr, " Applying Gain of %+5.2lf dB to file: %s\n", Gain, filename);
 		if (write_to_log) {
 			write_log(" Applying Gain of %+5.2lf dB to file: %s\n", Gain, filename);
 		}
@@ -576,15 +568,6 @@ int write_gains(const char *filename, double radio_gain, double audiophile_gain,
 
 			total_read += ((double)readcount / wg_opts->rate);
 			total_files += ((double)readcount / wg_opts->rate);
-			if( (long)total_files % 4 == 0) {
-				if (wg_opts->undo)
-					fprintf(stderr, "This file %3.0lf%% done\r", 
-						total_read / (wg_opts->total_samples_per_channel / wg_opts->rate) * 100);
-				else
-					fprintf(stderr, "This file %3.0lf%% done\tAll files %3.0lf%% done\r", 
-						total_read / (wg_opts->total_samples_per_channel / wg_opts->rate) * 100,
-						total_files / (total_samples / wg_opts->rate) * 100);
-			}
 
 			if (readcount == 0) {
 				break;
